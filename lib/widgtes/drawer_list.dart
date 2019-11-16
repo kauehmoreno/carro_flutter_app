@@ -1,23 +1,23 @@
 
 import 'package:carro_flutter_app/pages/login_page.dart';
+import 'package:carro_flutter_app/src/login/login.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 class DrawerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final foto = "https://miro.medium.com/fit/c/256/256/0*ZmGPgl9Ow9wFH7Aw.";
+    Future<User> future = cacheGetUser();
     return SafeArea(
       child: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("Kauêh Moreno"),
-              accountEmail: Text("kauehmoreno@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(foto),
-              ),
-            ),
+           FutureBuilder<User>(
+             future: future,
+             builder: (ctx, snapshot){
+               User user = snapshot.data;
+               return _userHeader(user) ?? Container();
+             }) ,
             ListTile(
               leading: Icon(Icons.star),
               title: Text("Favoritos"),
@@ -48,6 +48,16 @@ class DrawerList extends StatelessWidget {
         )
       ),
     );
+  }
+
+  UserAccountsDrawerHeader _userHeader(User user) {
+    return UserAccountsDrawerHeader(
+            accountName: Text(user.name),
+            accountEmail: Text(user.email),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(user.image),
+            ),
+          );
   }
 }
 onClickLogout(BuildContext context) {
