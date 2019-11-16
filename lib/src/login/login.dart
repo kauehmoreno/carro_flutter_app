@@ -81,10 +81,14 @@ void cacheUser(User user) {
 
 Future<User> cacheGetUser() async {
   var u = await prefGetString("user_cache");
-  if(u == ""){
+  if(u.isEmpty){
     return null;
   }
   Map map = json.decode(u);
   User user = User.fromJson(map);
   return user;
+}
+
+void clearUser(){
+  prefSetString("user:cache", "");
 }
