@@ -26,31 +26,44 @@ class LoginPage extends StatelessWidget {
     );
   }
   Widget _body(BuildContext ctx){
-    return Form(
-      key: _formKey,
-        child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: <Widget>[
-            AppTextFormField(
-              "Login", "Digite o login", 
-              controller:_ctrLogin, validator: _validateLogin, ctx: ctx,
-              keyboardType: TextInputType.emailAddress, textInputAction: TextInputAction.next,
-              nextFocus: _focusPassword,
-            ),
-            SizedBox(height: 20),
-            AppTextFormField(
-              "Senha", "Digite a senha", 
-              obscureText: true, controller: _ctrPassword, ctx: ctx,
-              validator: _validatePassword, keyboardType: TextInputType.number,
-              focusNode: _focusPassword,
-            ),
-            SizedBox(height: 20),
-            AppButton(
-              "Login", 
-              onPressed: () => _onClickLogin(ctx),
-            ),
-          ],
+    return Container(
+      margin: EdgeInsets.only(top:170),
+      width: double.infinity,
+      height: 300,
+      decoration: BoxDecoration(
+        color:Color.fromARGB(255, 231, 231, 231),
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, offset: Offset(0.0,15.0),blurRadius: 15.0),
+          BoxShadow(color: Colors.black12, offset: Offset(0.0,-10.0),blurRadius: 10.0)
+        ]
+      ),
+      child: Form(
+        key: _formKey,
+          child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView(
+            children: <Widget>[
+              AppTextFormField(
+                "Login", "Digite o login", 
+                controller:_ctrLogin, validator: _validateLogin, ctx: ctx,
+                keyboardType: TextInputType.emailAddress, textInputAction: TextInputAction.next,
+                nextFocus: _focusPassword,
+              ),
+              SizedBox(height: 20),
+              AppTextFormField(
+                "Senha", "Digite a senha", 
+                obscureText: true, controller: _ctrPassword, ctx: ctx,
+                validator: _validatePassword, keyboardType: TextInputType.number,
+                focusNode: _focusPassword,
+              ),
+              SizedBox(height: 20),
+              AppButton(
+                "Login", 
+                onPressed: () => _onClickLogin(ctx),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -69,7 +82,7 @@ class LoginPage extends StatelessWidget {
     if(response.ok){
       User user = response.result;
       print(">>>> $user");
-      push(ctx, HomePage());
+      push(ctx, HomePage(), replace: true);
       return;
     }
     alert(ctx, response.errorMsg);
