@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/blocs/loripsum_bloc.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,11 @@ class CarPageDetail extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
-          Image.network(car.image),
+          CachedNetworkImage(
+            imageUrl: car.image ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0_AwAlrkiziiz6_mkuavRL-TDJpoFpo9hrIeHDZu4BMY0K5M&s",
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
           _firstBlock(),
           Divider(),
           _secondBlock()

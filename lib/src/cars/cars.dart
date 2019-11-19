@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:carro_flutter_app/src/cars/db_context.dart';
+import 'package:carro_flutter_app/src/db/db.dart';
 import 'package:carro_flutter_app/src/login/login.dart';
 import 'package:http/http.dart' as http;
 
@@ -65,5 +67,7 @@ Future<List<Car>> getCars(CarType type) async {
   var response = await http.get(url, headers: header);
   List listResponse = json.decode(response.body);
   final cars = listResponse.map<Car>((map)=> Car.fromJson(map)).toList();
+  final database = await dB();
+  cars.forEach((Car car) => saveCarDB(database, car));
   return cars;
 }

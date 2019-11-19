@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     Future<User> future = cacheGetUser();
-
     // keep user logged
     future.then((User user){
       if(user != null){

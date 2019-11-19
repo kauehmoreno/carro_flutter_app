@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/pages/car_page_detail.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
@@ -30,7 +31,13 @@ class CarListView extends StatelessWidget {
                     Center(child: AnimatedContainer(
                       duration: Duration(seconds: 500),
                       curve: Curves.easeIn,
-                      child: Image.network(car.image??"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0_AwAlrkiziiz6_mkuavRL-TDJpoFpo9hrIeHDZu4BMY0K5M&s", width: 250))
+                      child: CachedNetworkImage(
+                        imageUrl: car.image ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0_AwAlrkiziiz6_mkuavRL-TDJpoFpo9hrIeHDZu4BMY0K5M&s",
+                        placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                      // CachedImage.network(car.image??"", width: 250)
+                    )
                     ),
                     Text(
                       car.name ?? "Sem nome", 
