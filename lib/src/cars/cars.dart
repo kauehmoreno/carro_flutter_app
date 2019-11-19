@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carro_flutter_app/src/login/login.dart';
 import 'package:http/http.dart' as http;
 
 class Car{
@@ -53,8 +54,15 @@ enum CarType{
 Future<List<Car>> getCars(CarType type) async {
   // gambe
   var t = type.toString().replaceAll("CarType.", "");
-  var url = "http://carros-springboot.herokuapp.com/api/v1/carros/tipo/$t";
-  var response = await http.get(url);
+
+  User user = await cacheGetUser();
+
+  Map<String, String> header = {
+    "Content-type": "application/json",
+    "Authorization": "Bearer ${user.token ?? null}"
+  };
+  var url = "http://carros-springboot.herokuapp.com/api/v2/carros/tipo/$t";
+  var response = await http.get(url, headers: header);
   List listResponse = json.decode(response.body);
   final cars = listResponse.map<Car>((map)=> Car.fromJson(map)).toList();
   return cars;

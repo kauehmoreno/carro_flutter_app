@@ -16,7 +16,7 @@ class DrawerList extends StatelessWidget {
              future: future,
              builder: (ctx, snapshot){
                User user = snapshot.data;
-               return _userHeader(user) ?? Container();
+               return user != null ? _userHeader(user) : Container();
              }) ,
             ListTile(
               leading: Icon(Icons.star),

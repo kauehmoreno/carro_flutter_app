@@ -17,7 +17,7 @@ class User{
      this.name =  map["nome"];
      this.login = map["login"]; 
      this.email = map["email"]; 
-     
+     this.image = map["urlFoto"] ?? "https://ceulaw.org.br/wp-content/uploads/2017/08/user-placeholder.jpg";
      this.token = map["token"];
      this.roles = map["roles"] != null ? map["roles"].map<String>((role) => role.toString()).toList(): null;
   }
@@ -90,5 +90,5 @@ Future<User> cacheGetUser() async {
 }
 
 void clearUser(){
-  prefSetString("user:cache", "");
+  prefSetString("user_cache", "");
 }

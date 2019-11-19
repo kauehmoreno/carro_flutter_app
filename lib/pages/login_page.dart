@@ -7,14 +7,33 @@ import 'package:carro_flutter_app/widgtes/app_button.dart';
 import 'package:carro_flutter_app/widgtes/app_text_form_field.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
-  // controls editing text from textForm field
   final _ctrLogin = TextEditingController();
+
   final _ctrPassword = TextEditingController();
 
   final _focusPassword = FocusNode();
+
+  @override 
+  void initState(){
+    super.initState();
+
+    Future<User> future = cacheGetUser();
+
+    // keep user logged
+    future.then((User user){
+      if(user != null){
+        push(context, HomePage(), replace: true);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +44,7 @@ class LoginPage extends StatelessWidget {
       body: _body(context),
     );
   }
+
   Widget _body(BuildContext ctx){
     return Container(
       margin: EdgeInsets.only(top:170),

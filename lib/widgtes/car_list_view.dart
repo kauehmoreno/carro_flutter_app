@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:carro_flutter_app/blocs/page_bloc.dart';
+import 'package:carro_flutter_app/pages/car_page.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
+import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 class CarListView extends StatefulWidget {
-  CarType carType;
+  final CarType carType;
   CarListView(this.carType);
 
   @override
@@ -10,23 +15,32 @@ class CarListView extends StatefulWidget {
 }
 
 class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClientMixin<CarListView>{
+  List<Car> cars;
+
+  final _bloc = CarBloc();
 
   @override
   bool get wantKeepAlive => true;
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return _body();
+  void initState(){
+    super.initState();
+    _bloc.load(widget.carType);
   }
 
-  _body() {
-    Future<List<Car>> cars = getCars(widget.carType);
-    return FutureBuilder(
-      future:cars,
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return StreamBuilder(
+      stream: _bloc.stream,
       builder: (BuildContext ctx, AsyncSnapshot snapshot){
         if(snapshot.hasError){
-          print(snapshot.error);
           return Center(
             child: Text("Não foi possível buscar os carros", style: TextStyle(color: Colors.red, fontSize: 22)),
           );
@@ -80,7 +94,7 @@ class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClient
                         children: <Widget>[
                           FlatButton(
                             child: const Text("DETALHES"),
-                            onPressed: (){},
+                            onPressed: () => _onClickDetail(car),
                           ),
                           FlatButton(
                             child: const Text("SHARE"),
@@ -97,5 +111,9 @@ class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClient
       ),
     ),
   );}
+
+  void _onClickDetail(Car car) {
+    push(context, CarPage(car));
+  }
 }
 
