@@ -11,9 +11,13 @@ class CarBloc {
   Stream<List<Car>> get stream => _streamCtrl.stream;
 
   load(CarType type) async{
-    List<Car> cars = await getCars(type);
-
-    _streamCtrl.add(cars);
+    try{
+      List<Car> cars = await getCars(type);
+      _streamCtrl.add(cars);
+    }catch(error){
+      print("error to get cars: $error");
+      _streamCtrl.addError(error);
+    }
   }
 
   void dispose(){

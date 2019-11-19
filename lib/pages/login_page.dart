@@ -100,8 +100,8 @@ class _LoginPageState extends State<LoginPage> {
     ResponseAPI response =  await loginApi(login, senha);
   
     if(response.ok){
-      User user = response.result;
-      print(">>>> $user");
+      // User user = response.result;
+      // print(">>>> $user");
       push(ctx, HomePage(), replace: true);
       return;
     }
