@@ -31,12 +31,15 @@ FutureOr<void> _onCreate(Database db, int version) async {
     'CREATE TABLE car(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT'
     ', descricao TEXT, urlFoto TEXT, urlVideo TEXT, latitude TEXT, longitude TEXT)'
   );
+  await db.execute(
+  'CREATE TABLE favorito(id INTEGER PRIMARY KEY, nome TEXT)');
 }
   
 FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async{
   print("_onUpgrade: oldversion: $oldVersion > newVersion: $newVersion");
   if(oldVersion ==  1 && newVersion == 2){
-    await db.execute("alter table car add column NOVA TEXT");
+    print("old version $oldVersion vs new version $newVersion");
+    // await db.execute("alter table car add column NOVA TEXT");
   }
 }
 

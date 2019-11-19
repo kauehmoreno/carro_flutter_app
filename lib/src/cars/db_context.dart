@@ -4,6 +4,9 @@ import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<int> saveCarDB(Database db, Car car) async{
+  if(db == null){
+    return 0;
+  }
   try{
     var id = db.insert(
       "car", car.toJson(),
