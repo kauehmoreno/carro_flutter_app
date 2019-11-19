@@ -1,6 +1,6 @@
+import 'package:carro_flutter_app/pages/car_page.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/utils/preferences.dart';
-import 'package:carro_flutter_app/widgtes/car_list_view.dart';
 import 'package:carro_flutter_app/widgtes/drawer_list.dart';
 import 'package:flutter/material.dart';
 
@@ -48,9 +48,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          CarListView(CarType.classicos),
-          CarListView(CarType.esportivos),
-          CarListView(CarType.luxo)
+          CarPageList(CarType.classicos),
+          CarPageList(CarType.esportivos),
+          CarPageList(CarType.luxo)
         ]
       ),
       drawer: DrawerList(),

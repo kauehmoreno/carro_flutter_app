@@ -10,13 +10,20 @@ class CarBloc {
 
   Stream<List<Car>> get stream => _streamCtrl.stream;
 
-  load(CarType type) async{
+  Future<List<Car>>load(CarType type) async{
     try{
       List<Car> cars = await getCars(type);
-      _streamCtrl.add(cars);
+      try{
+        _streamCtrl.add(cars);
+        return cars;
+      }catch(streamError, exception){
+        print("fail to add on stream builder CarBloc: $streamError - exception: $exception");
+        return null;
+      }
     }catch(error){
       print("error to get cars: $error");
       _streamCtrl.addError(error);
+      return null;
     }
   }
 

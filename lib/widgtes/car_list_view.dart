@@ -1,60 +1,15 @@
-import 'dart:async';
-
-import 'package:carro_flutter_app/blocs/page_bloc.dart';
-import 'package:carro_flutter_app/pages/car_page.dart';
+import 'package:carro_flutter_app/pages/car_page_detail.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
 
-class CarListView extends StatefulWidget {
-  final CarType carType;
-  CarListView(this.carType);
+class CarListView extends StatelessWidget {
+  final List<Car> cars;
+
+  CarListView(this.cars);
 
   @override
-  _CarListViewState createState() => _CarListViewState();
-}
-
-class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClientMixin<CarListView>{
-  List<Car> cars;
-
-  final _bloc = CarBloc();
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState(){
-    super.initState();
-    _bloc.load(widget.carType);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return StreamBuilder(
-      stream: _bloc.stream,
-      builder: (BuildContext ctx, AsyncSnapshot snapshot){
-        if(snapshot.hasError){
-          return Center(
-            child: Text("Não foi possível buscar os carros", style: TextStyle(color: Colors.red, fontSize: 22)),
-          );
-        }
-        if(!snapshot.hasData){
-          return Center(child: CircularProgressIndicator());
-        }
-        List<Car> cars = snapshot.data;
-        return _listCars(cars);
-      },
-    );
-  }
-
-  Center _listCars(List<Car> cars) {
+  Widget build(BuildContext context) {  
     return Center(
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
@@ -94,7 +49,7 @@ class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClient
                         children: <Widget>[
                           FlatButton(
                             child: const Text("DETALHES"),
-                            onPressed: () => _onClickDetail(car),
+                            onPressed: () => _onClickDetail(context, car),
                           ),
                           FlatButton(
                             child: const Text("SHARE"),
@@ -112,8 +67,8 @@ class _CarListViewState extends State<CarListView> with AutomaticKeepAliveClient
     ),
   );}
 
-  void _onClickDetail(Car car) {
-    push(context, CarPage(car));
+  void _onClickDetail(BuildContext ctx, Car car) {
+    push(ctx, CarPageDetail(car));
   }
 }
 
