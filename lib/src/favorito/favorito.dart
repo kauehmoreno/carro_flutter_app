@@ -1,8 +1,15 @@
 
+import 'package:carro_flutter_app/src/cars/cars.dart';
+
 class Favorito{
 
   int id ;
   String nome;
+
+  Favorito.fromCar(Car c){
+    id = c.id;
+    nome = c.name;
+  }
 
   Favorito.fromJson(Map<String,dynamic>map){
     id = map["id"];

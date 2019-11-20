@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class AppTextFormField extends StatelessWidget {
 
-  String label;
-  String hint;
-  BuildContext ctx; 
-  bool obscureText; 
-  TextEditingController controller;
-  FormFieldValidator<String> validator;
-  TextInputType keyboardType; 
-  TextInputAction textInputAction;
-  Brightness keyboardAppearance;
-  FocusNode focusNode;
-  FocusNode nextFocus;
+  final String label;
+  final String hint;
+  final BuildContext ctx; 
+  final bool obscureText; 
+  final TextEditingController controller;
+  final FormFieldValidator<String> validator;
+  final TextInputType keyboardType; 
+  final TextInputAction textInputAction;
+  final Brightness keyboardAppearance;
+  final FocusNode focusNode;
+  final FocusNode nextFocus;
 
   AppTextFormField(
     this.label, this.hint,

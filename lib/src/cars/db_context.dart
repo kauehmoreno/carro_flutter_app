@@ -1,6 +1,7 @@
 
 
 import 'package:carro_flutter_app/src/cars/cars.dart';
+import 'package:carro_flutter_app/src/db/db_context.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<int> saveCarDB(Database db, Car car) async{
@@ -42,14 +43,13 @@ Future<bool> existCarDB(Database db, Car car) async{
 }
 
 Future<int>countCarDB(Database db) async{
-  final list = await db.rawQuery("selec count(*) from car");
-  return Sqflite.firstIntValue(list);
+  return countDB(db, "car");
 }
 
 Future<int>deleteCarDB(Database db,int id) async{
-  return await db.rawDelete("dele from car where id = ?",[id]);
+  return await deleteByIDDB(db, "car", id);
 }
 
-Future<int> deleteAllDB(Database db) async{
-  return await db.rawDelete("delete from car");
+Future<int> deleteAllCarDB(Database db) async{
+  return await deleteAllDB(db, "car");
 }

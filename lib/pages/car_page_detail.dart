@@ -1,18 +1,45 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/blocs/loripsum_bloc.dart';
+import 'package:carro_flutter_app/pages/car_form_page.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
+import 'package:carro_flutter_app/src/db/db.dart';
+import 'package:carro_flutter_app/src/favorito/db_context.dart';
+import 'package:carro_flutter_app/src/favorito/favorito.dart';
+import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
-class CarPageDetail extends StatelessWidget {
+class CarPageDetail extends StatefulWidget {
   final Car car;
 
   CarPageDetail(this.car);
 
   @override
+  _CarPageDetailState createState() => _CarPageDetailState();
+}
+
+class _CarPageDetailState extends State<CarPageDetail> {
+  Color _color = Colors.grey;
+
+  @override
+  void initState() {
+    super.initState();
+    final futureDb = dB();
+    futureDb.then((db){
+      Future<bool> futurebool = isFavorite(db, widget.car.id);
+      futurebool.then((bool isFavorite){
+        setState(() {
+          _color = isFavorite ? Colors.red : Colors.grey;
+        });
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(car.name),
+        title: Text(widget.car.name),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.place),
@@ -36,17 +63,18 @@ class CarPageDetail extends StatelessWidget {
       body: _body()
     );
   }
+
   _body() {
     return Container(
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
           CachedNetworkImage(
-            imageUrl: car.image ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0_AwAlrkiziiz6_mkuavRL-TDJpoFpo9hrIeHDZu4BMY0K5M&s",
+            imageUrl: widget.car.image ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0_AwAlrkiziiz6_mkuavRL-TDJpoFpo9hrIeHDZu4BMY0K5M&s",
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
-          _firstBlock(),
+          _firstBlock(widget.car),
           Divider(),
           _secondBlock()
         ],
@@ -54,7 +82,7 @@ class CarPageDetail extends StatelessWidget {
     );
   }
 
-  Row _firstBlock() {
+  Row _firstBlock(Car car) {
     return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -68,8 +96,8 @@ class CarPageDetail extends StatelessWidget {
             Row(
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.favorite, color: Colors.red, size:40),
-                  onPressed: _onClickFavorite,
+                  icon: Icon(Icons.favorite, color: _color, size:40),
+                  onPressed: () => _onClickFavorite(car),
                 ),
                 IconButton(
                   icon: Icon(Icons.share, size:40),
@@ -85,7 +113,7 @@ class CarPageDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(car.description, style: TextStyle(fontSize: 16)),
+        Text(widget.car.description, style: TextStyle(fontSize: 16)),
         SizedBox(height: 20),
         FutureBuilder(
           future: LoripsumBloc().fetch(),
@@ -109,6 +137,7 @@ class CarPageDetail extends StatelessWidget {
   void _onClickPopupMenu(String value) {
     switch (value) {
       case "edit":
+        push(context, CarFormPage(car: widget.car));
         print("editar...");
         break;
       case "delete":
@@ -122,7 +151,19 @@ class CarPageDetail extends StatelessWidget {
     }
   }
 
-  void _onClickFavorite() {
+  void _onClickFavorite(Car c) {
+    final f = Favorito.fromCar(c);
+    Future<Database> futureDb = dB();
+    futureDb.then((Database db){
+      Future<int> futureSave = saveFavorito(db, f);
+      futureSave.then((int result){
+        var feedback = result > 0 ? "succeed": "fail";
+        print("favorito save has $feedback");
+        setState(() {
+          _color = result > 0 ? _color == Colors.red ? Colors.grey : Colors.red : Colors.grey;
+        });
+      });
+    });
   }
 
   void _onClickShare() {
