@@ -1,8 +1,9 @@
 
 
+import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
 
-alert(BuildContext ctx, String msg){
+alert(BuildContext ctx, String msg, {Function callback}){
   showDialog(
     context: ctx,
     barrierDismissible: false,
@@ -15,7 +16,10 @@ alert(BuildContext ctx, String msg){
             FlatButton(
               child: Text("OK"),
               onPressed: (){
-                Navigator.pop(ctx);
+                pop(ctx);
+                if(callback != null){
+                  callback();
+                }
               },
             )
           ],

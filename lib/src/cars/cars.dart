@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carro_flutter_app/src/api/response.dart';
 import 'package:carro_flutter_app/src/cars/db_context.dart';
 import 'package:carro_flutter_app/src/db/db.dart';
 import 'package:carro_flutter_app/src/login/login.dart';
@@ -70,4 +71,33 @@ Future<List<Car>> getCars(CarType type) async {
   final database = await dB();
   cars.forEach((Car car) => saveCarDB(database, car));
   return cars;
+}
+
+Future<ResponseAPI<bool>> saveCar(Car car) async {
+  User user = await cacheGetUser();
+
+  Map<String, String> header = {
+    "Content-type": "application/json",
+    "Authorization": "Bearer ${user.token ?? null}"
+  };
+
+  var url = "http://carros-springboot.herokuapp.com/api/v2/carros";
+  
+  if(car.id != null){
+    url += "/${car.id}";
+  }
+  
+  var resp = await (car.id == null 
+  ? http.post(url,body: json.encode(car.toJson()), headers: header)
+  : http.put(url,body: json.encode(car.toJson()), headers: header));
+
+  if(resp.statusCode == 200 || resp.statusCode == 201){
+    // Map mapResp = json.decode(resp.body);
+    // Car newCar = Car.fromJson(mapResp);
+    return ResponseAPI.ok(true);
+  }
+  if(resp.statusCode == 401 || resp.statusCode == 403){
+    return ResponseAPI.error("Ação não autorizada!");
+  }
+  return ResponseAPI.error("Não foi possível salvar o carro");
 }
