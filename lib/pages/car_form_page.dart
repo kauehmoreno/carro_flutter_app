@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/src/api/response.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
@@ -6,6 +8,7 @@ import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:carro_flutter_app/widgtes/app_button.dart';
 import 'package:carro_flutter_app/widgtes/app_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarFormPage extends StatefulWidget {
   final Car car;
@@ -26,6 +29,8 @@ class _CarFormPageState extends State<CarFormPage> {
   int _radioIndex = 0;
 
   var _showProgressBar = false;
+
+  File _file;
 
 
   String _validateName(String v){
@@ -97,11 +102,10 @@ class _CarFormPageState extends State<CarFormPage> {
   }
 
   _headerFoto() {
-    return widget.car != null 
-    ? CachedNetworkImage(
-      imageUrl: widget.car.image,
-    )
-    : Image.asset("assets/images/selfie.png", height: 150,);
+    return InkWell(
+      onTap: _onclickFoto,
+      child: _renderPhoto(),
+    );
   }
 
   _radioType() {
@@ -172,6 +176,22 @@ class _CarFormPageState extends State<CarFormPage> {
     setState(() {
       _radioIndex = value;
     });
+  }
+
+  void _onclickFoto() async {
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (file != null){
+      setState(() {
+        this._file = file;
+      });
+    }
+  }
+
+  _renderPhoto() {
+    return _file != null 
+    ? Image.file(_file, height: 150,): widget.car != null 
+      ? CachedNetworkImage(imageUrl: widget.car.image, height: 150,)
+      : Image.asset("assets/images/selfie.png", height: 150,);
   }
 }
 
