@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/src/api/response.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/utils/alert.dart';
+import 'package:carro_flutter_app/utils/event_bus.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:carro_flutter_app/widgtes/app_button.dart';
 import 'package:carro_flutter_app/widgtes/app_text_form_field.dart';
@@ -160,6 +161,7 @@ class _CarFormPageState extends State<CarFormPage> {
 
     if(response.ok){
       alert(context, "Carro salvo com sucesso", callback: (){
+        EventBus.getEvent(context).sendEvent(CarEvent("car_save", c.type));
         pop(context);
       });
       return;

@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carro_flutter_app/blocs/loripsum_bloc.dart';
 import 'package:carro_flutter_app/pages/car_form_page.dart';
+import 'package:carro_flutter_app/pages/video_page.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/src/db/db.dart';
 import 'package:carro_flutter_app/src/favorito/db_context.dart';
 import 'package:carro_flutter_app/src/favorito/favorito.dart';
+import 'package:carro_flutter_app/utils/alert.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CarPageDetail extends StatefulWidget {
@@ -47,7 +50,7 @@ class _CarPageDetailState extends State<CarPageDetail> {
           ),
           IconButton(
             icon: Icon(Icons.videocam),
-            onPressed: _onClickVideo,
+            onPressed:()=> _onClickVideo(context, widget.car),
           ),
           PopupMenuButton<String>(
             onSelected: (String value) => _onClickPopupMenu(value),
@@ -101,7 +104,7 @@ class _CarPageDetailState extends State<CarPageDetail> {
                 ),
                 IconButton(
                   icon: Icon(Icons.share, size:40),
-                  onPressed: _onClickShare,
+                  onPressed: () => _onClickShare(car),
                 ),
               ],
             )
@@ -128,7 +131,12 @@ class _CarPageDetailState extends State<CarPageDetail> {
     );
   }
 
-  void _onClickVideo() {
+  void _onClickVideo(BuildContext context,Car car) {
+    if(car.video != null && car.video.isNotEmpty){
+      push(context, VideoPage(car));
+      return;
+    }
+    alert(context, "Este carro não possuí vídeo");
   }
 
   void _onClickMap() {
@@ -144,7 +152,7 @@ class _CarPageDetailState extends State<CarPageDetail> {
         print("deletar...");
         break;
       case "share":
-        print("share...");
+        _onClickShare(widget.car);
         break;
       default:
        print("not mapped...");
@@ -166,6 +174,7 @@ class _CarPageDetailState extends State<CarPageDetail> {
     });
   }
 
-  void _onClickShare() {
+  void _onClickShare(Car car) {
+    Share.share(car.image, subject: "Olhe esse ${car.name} do tipo ${car.type}");
   }
 }

@@ -4,7 +4,16 @@ import 'package:carro_flutter_app/src/api/response.dart';
 import 'package:carro_flutter_app/src/cars/db_context.dart';
 import 'package:carro_flutter_app/src/db/db.dart';
 import 'package:carro_flutter_app/src/login/login.dart';
+import 'package:carro_flutter_app/utils/event_bus.dart';
 import 'package:http/http.dart' as http;
+
+
+class CarEvent extends Event {
+  String action;
+  String identifier;
+  CarEvent(this.action, this.identifier);
+}
+
 
 class Car{
   int id;
@@ -66,6 +75,10 @@ Future<List<Car>> getCars(CarType type) async {
   };
   var url = "http://carros-springboot.herokuapp.com/api/v2/carros/tipo/$t";
   var response = await http.get(url, headers: header);
+  if(response.statusCode != 200){
+    Map<String,dynamic> resp = json.decode(response.body);
+    throw new Exception(resp["error"]?? "fail to fetch");
+  }
   List listResponse = json.decode(response.body);
   final cars = listResponse.map<Car>((map)=> Car.fromJson(map)).toList();
   final database = await dB();

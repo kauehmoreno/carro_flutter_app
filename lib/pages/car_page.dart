@@ -1,7 +1,10 @@
 
 
+import 'dart:async';
+
 import 'package:carro_flutter_app/blocs/page_bloc.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
+import 'package:carro_flutter_app/utils/event_bus.dart';
 import 'package:carro_flutter_app/widgtes/car_list_view.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +23,8 @@ class _CarPageListState extends State<CarPageList> with AutomaticKeepAliveClient
 
   final _bloc = CarBloc();
 
+  StreamSubscription<Event> subscription;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -27,12 +32,23 @@ class _CarPageListState extends State<CarPageList> with AutomaticKeepAliveClient
   void initState(){
     super.initState();
     _bloc.load(widget.carType);
+
+    // escutando um evento de stream
+    final bus = EventBus.getEvent(context);
+    subscription = bus.stream.listen((Event ev){
+      CarEvent carEvt = ev;
+      if(carEvt.identifier == widget.carType.toString()){
+        _bloc.load(widget.carType);
+      }
+    });
+    
   }
 
   @override
   void dispose() {
     super.dispose();
     _bloc.dispose();
+    subscription.cancel();
   }
 
   @override

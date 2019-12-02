@@ -3,6 +3,7 @@ import 'package:carro_flutter_app/pages/car_page_detail.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/utils/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class CarListView extends StatelessWidget {
   final List<Car> cars;
@@ -20,7 +21,10 @@ class CarListView extends StatelessWidget {
           itemCount: cars != null ? cars.length: 0,
           itemBuilder: (BuildContext ctx, int index){
             Car car = cars[index];
-            return Card(
+            return InkWell(
+              onTap: () => _onClickDetail(context, car),
+              onLongPress: () => _onLongPress(context,car),
+              child: Card(
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 500),
                 curve: Curves.easeIn,
@@ -60,7 +64,7 @@ class CarListView extends StatelessWidget {
                           ),
                           FlatButton(
                             child: const Text("SHARE"),
-                            onPressed: (){},
+                            onPressed: ()=> _onClickShare(context, car),
                           ),
                         ],
                       ),
@@ -68,7 +72,8 @@ class CarListView extends StatelessWidget {
                   ],
                 ),
               ),
-          );
+          ),
+            );
         },
       ),
     ),
@@ -76,6 +81,44 @@ class CarListView extends StatelessWidget {
 
   void _onClickDetail(BuildContext ctx, Car car) {
     push(ctx, CarPageDetail(car));
+  }
+
+  void _onLongPress(BuildContext ctx, Car car) {
+    showBottomSheet(context: ctx, builder: (BuildContext ctx){
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              car.name,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            title: Text("Detalhes"),
+            leading: Icon(Icons.directions_car),
+            onTap: (){
+              pop(ctx);
+              _onClickDetail(ctx, car);
+            },
+          ),
+          ListTile(
+            title: Text("Share"),
+            leading: Icon(Icons.share),
+            onTap: (){
+              pop(ctx);
+              _onClickShare(ctx, car);
+            },
+          )
+        ],
+      );
+    });
+  }
+
+  void _onClickShare(BuildContext ctx, Car car) {
+    print("sharing car ${car.name}");
+    Share.share(car.image, subject: "Olhe esse ${car.name} do tipo ${car.type}");
   }
 }
 

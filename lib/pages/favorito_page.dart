@@ -4,6 +4,7 @@ import 'package:carro_flutter_app/blocs/favorite_bloc.dart';
 import 'package:carro_flutter_app/src/cars/cars.dart';
 import 'package:carro_flutter_app/widgtes/car_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteList extends StatefulWidget {
   FavoriteList();
@@ -17,7 +18,7 @@ class _FavoriteListState extends State<FavoriteList> with AutomaticKeepAliveClie
 
    List<Car> cars;
 
-  final _bloc = FavoriteBloc();
+  // final _bloc = FavoriteBloc();
 
   @override
   bool get wantKeepAlive => true;
@@ -25,18 +26,20 @@ class _FavoriteListState extends State<FavoriteList> with AutomaticKeepAliveClie
   @override
   void initState(){
     super.initState();
+    final _bloc = Provider.of<FavoriteBloc>(context, listen: false);
     _bloc.load();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _bloc.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final _bloc = Provider.of<FavoriteBloc>(context);
     return StreamBuilder(
       stream: _bloc.stream,
       builder: (BuildContext ctx, AsyncSnapshot snapshot){
@@ -57,6 +60,6 @@ class _FavoriteListState extends State<FavoriteList> with AutomaticKeepAliveClie
     );
   }
   Future<void> _onRefresh() {
-    return _bloc.load();
+    return Provider.of<FavoriteBloc>(context).load();
   }
 }
