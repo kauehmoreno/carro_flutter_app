@@ -6,6 +6,7 @@ import 'package:carro_flutter_app/src/login/login.dart';
 import 'package:carro_flutter_app/widgtes/app_button.dart';
 import 'package:carro_flutter_app/widgtes/app_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -81,6 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                 "Login", 
                 onPressed: () => _onClickLogin(ctx),
               ),
+              Container(
+                height: 46,
+                margin: EdgeInsets.only(top:16),
+                child: GoogleSignInButton(
+                  onPressed: _onClickGoogleSignIn,
+                ),
+              ),
             ],
           ),
         ),
@@ -119,5 +127,9 @@ class _LoginPageState extends State<LoginPage> {
       return "Senha muito curta";
     }       
     return null;
+  }
+
+  void _onClickGoogleSignIn() {
+    print("google sign");
   }
 }
