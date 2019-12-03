@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1025195527498-apdgeml7qav9pqpnfvd20425hhg59hta.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1025195527498-apdgeml7qav9pqpnfvd20425hhg59hta</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAzDFivwwP2A7foZvRMIw6_arLWiMMmwAY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1025195527498</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.carroFlutterApp</string>
+	<key>PROJECT_ID</key>
+	<string>carro-flutter</string>
+	<key>STORAGE_BUCKET</key>
+	<string>carro-flutter.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1025195527498:ios:66c6852d82793191dcc5b3</string>
+	<key>DATABASE_URL</key>
+	<string>https://carro-flutter.firebaseio.com</string>
+</dict>
+</plist>
